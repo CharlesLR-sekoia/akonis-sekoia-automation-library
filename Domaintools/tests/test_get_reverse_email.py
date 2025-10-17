@@ -80,10 +80,10 @@ def test_get_reverse_email_action_success():
         result = action.run({"email": EMAIL})
 
         assert result is not None
-        
-        # Parse the result - it might be nested in a wrapper
-        data = json.loads(result)
-        
+
+        # Result is now a dict, no need to parse with json.loads()
+        data = result
+
         # Debug: print the actual structure
         print("Result structure:", json.dumps(data, indent=2))
 
@@ -105,21 +105,21 @@ def test_get_reverse_email_action_api_error():
             status_code=500,  # Return an error status
             json={"error": {"message": "Internal Server Error"}},
             additional_matcher=_qs_matcher({
-                "email": EMAIL 
+                "email": EMAIL
             })
         )
         result = action.run({"email": EMAIL})
-        
+
         # Debug: print the actual result
         print("Error result:", result)
-        
-        # Parse and check for error
+
+        # Result is now a dict, no need to parse
         if result:
-            data = json.loads(result)
+            data = result
             # Check if there's an error in the response
             assert "error" in data or "Error" in str(data)
         else:
             # If your action returns None/False on error
             assert not result
-            
+
         assert mock_requests.call_count == 1

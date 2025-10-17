@@ -84,13 +84,13 @@ def test_get_domain_reputation_action_success():
         response = action.run({"domain": DOMAIN})
 
         assert response is not None
-        
-        # Parse the response - it might be nested in a wrapper
-        data = json.loads(response)
-        
+
+        # Result is now a dict, no need to parse with json.loads()
+        data = response
+
         # Debug: print the actual structure
         print("Result structure:", json.dumps(data, indent=2))
-        
+
         # Adjust assertion based on your actual return structure
         # If your action wraps the response, you might need something like:
         # assert data["Domain Reputation"]["results"][0]["domain"] == DOMAIN
@@ -120,17 +120,17 @@ def test_get_domain_reputation_action_api_error():
             })
         )
         response = action.run({"domain": DOMAIN})
-        
+
         # Debug: print the actual result
         print("Error response:", response)
-        
-        # Parse and check for error
+
+        # Result is now a dict, no need to parse
         if response:
-            data = json.loads(response)
+            data = response
             # Check if there's an error in the response
             assert "error" in data or "Error" in str(data)
         else:
             # If your action returns None/False on error
             assert not response
-            
+
         assert mock_requests.call_count == 1
