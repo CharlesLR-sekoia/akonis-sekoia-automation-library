@@ -1,13 +1,13 @@
 {
   "uuid": "1d4906b4-9b0d-4b33-ac89-c6c12e006ead",
-  "name": "Lookup Domain on Domaintools API returning a JSON dump",
-  "description": "A wrapper to lookup domain on Iris Investigate API v1",
+  "name": "Get Lookup Domain",
+  "description": "Retrieve comprehensive domain intelligence data from DomainTools Iris Investigate API, including WHOIS records, DNS information, IP addresses, risk scores, SSL certificates, and registration details for threat intelligence analysis",
   "docker_parameters": "get_lookup_domain",
   "arguments": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
       "domain": {
-        "description": "The domain to look for",
+        "description": "The domain name to investigate (e.g., example.com)",
         "default": "example.com",
         "type": "string"
       }
@@ -21,13 +21,34 @@
   "results": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
-      "limit_exceeded": {"type": "boolean","description": "domaintools limit per page?"},
-      "has_more_results": {"type": "boolean","description": "more results"},
-      "message": {"type": "string","description": "Response message from DT"},
-      "results_count": {"type": "integer","description": "Number of resulsts"},
-      "total_count": {"type": "integer","description": "Total count of results"},
-      "results": {"type": "array","description": "Domains results"},
-      "missing_domains": { "type": "array","description": "miising domains" }
+      "limit_exceeded": {
+        "type": "boolean",
+        "description": "Indicates if the API response limit per page has been exceeded"
+      },
+      "has_more_results": {
+        "type": "boolean",
+        "description": "Indicates if additional results are available beyond the current response"
+      },
+      "message": {
+        "type": "string",
+        "description": "Status message from DomainTools API (e.g., 'Enjoy your data.')"
+      },
+      "results_count": {
+        "type": "integer",
+        "description": "Number of domain results returned in the current response"
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of matching domain records available"
+      },
+      "results": {
+        "type": "array",
+        "description": "Array of domain investigation results containing WHOIS data, DNS records, IP addresses, risk scores, SSL certificates, registrar information, and historical data"
+      },
+      "missing_domains": {
+        "type": "array",
+        "description": "Array of domain names that were queried but not found in the DomainTools database"
+      }
     },
     "title": "Results",
     "type": "object"

@@ -1,13 +1,13 @@
 {
   "uuid": "68f2ef95-7d72-42a9-9d10-bd51b6b0b0b5",
-  "name": "Perform a reverse email lookup on Domaintools API returning a JSON dump",
-  "description": "A wrapper to reverse an email on Iris Investigate API v1",
+  "name": "Get Reverse Email",
+  "description": "Find all domains registered or managed by a specific email address through DomainTools Iris Investigate API. Discover domain portfolios, registrant connections, and related infrastructure by analyzing WHOIS email contacts for threat actor attribution and investigation",
   "docker_parameters": "get_reverse_email",
   "arguments": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
       "email": {
-        "description": "The email to look for",
+        "description": "The email address to search for in WHOIS records (e.g., admin@example.com)",
         "default": "admin@example.com",
         "type": "string"
       }
@@ -21,11 +21,36 @@
   "results": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
+      "limit_exceeded": {
+        "type": "boolean",
+        "description": "Indicates if the API response limit per page has been exceeded"
+      },
+      "has_more_results": {
+        "type": "boolean",
+        "description": "Indicates if additional results are available beyond the current response"
+      },
+      "message": {
+        "type": "string",
+        "description": "Status message from DomainTools API (e.g., 'Enjoy your data.')"
+      },
+      "results_count": {
+        "type": "integer",
+        "description": "Number of domains associated with the email in the current response"
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of domains linked to the queried email address"
+      },
       "results": {
-        "type": "string"
+        "type": "array",
+        "description": "Array of domains where the email appears in WHOIS records as registrant, administrative, technical, or billing contact"
+      },
+      "missing_domains": {
+        "type": "array",
+        "description": "Array of domain names that were queried but not found in the DomainTools database"
       }
     },
-    "title": "Response",
+    "title": "Results",
     "type": "object"
   },
   "slug": "get_reverse_email_in_domaintools"

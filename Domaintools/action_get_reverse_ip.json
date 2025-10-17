@@ -1,13 +1,13 @@
 {
   "uuid": "1dac0aa9-7930-416a-92cc-01be2de4639a",
-  "name": "Perform a reverse ip lookup on Domaintools API returning a JSON dump",
-  "description": "A wrapper to reverse an ip on Iris Investigate API v1",
+  "name": "Get Domain from Reverse IP",
+  "description": "Discover all domains hosted on a specific IP address through DomainTools Iris Investigate API. Identify shared hosting relationships, virtual host configurations, and related infrastructure to map attack surfaces and detect malicious co-hosted domains",
   "docker_parameters": "get_reverse_ip",
   "arguments": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
       "ip": {
-        "description": "The ip (or domain) to look for",
+        "description": "The IP address to search for hosted domains (e.g., 8.8.8.8)",
         "default": "8.8.8.8",
         "type": "string"
       }
@@ -21,20 +21,36 @@
   "results": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
-      "limit_exceeded": {"type": "boolean"},
-      "has_more_results": {"type": "boolean"},
-      "message": {"type": "string"},
-      "results_count": {"type": "integer"},
-      "total_count": {"type": "integer"},
+      "limit_exceeded": {
+        "type": "boolean",
+        "description": "Indicates if the API response limit per page has been exceeded"
+      },
+      "has_more_results": {
+        "type": "boolean",
+        "description": "Indicates if additional results are available beyond the current response"
+      },
+      "message": {
+        "type": "string",
+        "description": "Status message from DomainTools API (e.g., 'Enjoy your data.')"
+      },
+      "results_count": {
+        "type": "integer",
+        "description": "Number of domains hosted on the IP in the current response"
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of domains currently or historically hosted on the queried IP address"
+      },
       "results": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-      "missing_domains": { "type": "array" }
+        "type": "array",
+        "description": "Array of domains that resolve or have resolved to the specified IP address, including active and historical hosting relationships"
+      },
+      "missing_domains": {
+        "type": "array",
+        "description": "Array of domain names that were queried but not found in the DomainTools database"
+      }
     },
-    "title": "Response",
+    "title": "Results",
     "type": "object"
   },
   "slug": "get_reverse_ip_in_domaintools"
