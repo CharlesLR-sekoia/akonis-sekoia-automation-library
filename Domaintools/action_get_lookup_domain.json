@@ -21,20 +21,15 @@
   "results": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
-      "limit_exceeded": {"type": "boolean"},
-      "has_more_results": {"type": "boolean"},
-      "message": {"type": "string"},
-      "results_count": {"type": "integer"},
-      "total_count": {"type": "integer"},
-      "results": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-      "missing_domains": { "type": "array" }
+      "limit_exceeded": {"type": "boolean","description": "domaintools limit per page?"},
+      "has_more_results": {"type": "boolean","description": "more results"},
+      "message": {"type": "string","description": "Response message from DT"},
+      "results_count": {"type": "integer","description": "Number of resulsts"},
+      "total_count": {"type": "integer","description": "Total count of results"},
+      "results": {"type": "array","description": "Domains results"},
+      "missing_domains": { "type": "array","description": "miising domains" }
     },
-    "title": "Response",
+    "title": "Results",
     "type": "object"
   },
   "slug": "get_lookup_domain_in_domaintools"
