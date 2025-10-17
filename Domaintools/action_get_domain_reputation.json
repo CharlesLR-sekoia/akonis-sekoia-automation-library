@@ -1,5 +1,5 @@
 {
-  "uuid": "8c80f506-4e8b-45c3-8fb1-cd496644fdb4",
+  "uuid": "8e1e2361-f4ee-4e95-b06e-6d78b858089d",
   "name": "Get Domain reputation on Domaintools API returning a JSON dump",
   "description": "A wrapper to get domain reputation on Iris Investigate API v1",
   "docker_parameters": "get_domain_reputation",
