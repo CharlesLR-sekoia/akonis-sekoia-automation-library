@@ -49,7 +49,114 @@
       },
       "results": {
         "type": "array",
-        "description": "Array of domains connected to the queried indicator through shared infrastructure (IP, email, nameserver, etc.)"
+        "description": "Array of domains connected to the queried indicator through shared infrastructure (IP, email, nameserver, etc.)",
+        "items": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name found through the pivot search"
+            },
+            "domain_risk": {
+              "type": "object",
+              "description": "Domain risk assessment",
+              "properties": {
+                "risk_score": {
+                  "type": "integer",
+                  "description": "Numerical risk score for the domain (0-100, where higher values indicate greater risk)"
+                },
+                "risk_score_string": {
+                  "type": "string",
+                  "description": "Risk level classification (e.g., 'low', 'medium', 'high', 'critical')"
+                }
+              }
+            },
+            "registrar": {
+              "type": "object",
+              "description": "Domain registrar information",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Registrar name (e.g., 'GoDaddy.com, LLC', 'Name.com LLC')"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains registered with this registrar"
+                }
+              }
+            },
+            "registrant_org": {
+              "type": "object",
+              "description": "Registrant organization information",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Organization name of the domain registrant"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains registered to this organization"
+                }
+              }
+            },
+            "create_date": {
+              "type": "object",
+              "description": "Domain registration creation date",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Creation date in ISO format (YYYY-MM-DD)"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of occurrences"
+                }
+              }
+            },
+            "first_seen": {
+              "type": "object",
+              "description": "Date when the domain was first observed by DomainTools",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "First seen date in ISO format (YYYY-MM-DD)"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of occurrences"
+                }
+              }
+            },
+            "server_type": {
+              "type": "object",
+              "description": "Web server type and version information",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Server software identifier (e.g., 'nginx/1.21.0', 'Apache/2.4.48', 'cloudflare')"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains using this server type"
+                }
+              }
+            },
+            "website_title": {
+              "type": "object",
+              "description": "HTML title of the website",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Website title text"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains with this title"
+                }
+              }
+            }
+          }
+        }
       },
       "missing_domains": {
         "type": "array",

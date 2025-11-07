@@ -43,7 +43,68 @@
       },
       "results": {
         "type": "array",
-        "description": "Array of domains that resolve or have resolved to the specified IP address, including active and historical hosting relationships"
+        "description": "Array of domains that resolve or have resolved to the specified IP address, including active and historical hosting relationships",
+        "items": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name hosted on the IP address"
+            },
+            "domain_risk": {
+              "type": "object",
+              "description": "Risk assessment for the domain",
+              "properties": {
+                "risk_score": {
+                  "type": "integer",
+                  "description": "Overall risk score for the domain (0-100, where higher values indicate greater risk)"
+                }
+              }
+            },
+            "first_seen": {
+              "type": "object",
+              "description": "Date and time when the domain was first observed on this IP",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "First seen timestamp in ISO 8601 format (e.g., '2023-06-10T11:55:34Z')"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of occurrences"
+                }
+              }
+            },
+            "server_type": {
+              "type": "object",
+              "description": "Web server software information",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Server software identifier (e.g., 'Apache/2.4.41', 'nginx/1.18.0', 'cloudflare')"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains using this server type"
+                }
+              }
+            },
+            "website_title": {
+              "type": "object",
+              "description": "HTML title of the website",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Website title text"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "Number of domains with this title"
+                }
+              }
+            }
+          }
+        }
       },
       "missing_domains": {
         "type": "array",

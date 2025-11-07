@@ -3,13 +3,14 @@ import json
 from sekoia_automation.action import Action
 from .models import DomainToolsConfig, DomainToolsError, DomaintoolsrunAction
 
+
 class DomaintoolsReverseIP(Action):
     def run(self, arguments: dict[str, Any]) -> dict:
         try:
             config = DomainToolsConfig(
                 api_username=self.module.configuration["api_username"],
                 api_key=self.module.configuration["api_key"],
-                host="https://api.domaintools.com/"
+                host="https://api.domaintools.com/",
             )
 
             parsed_args: dict[str, Any] = {
@@ -19,10 +20,8 @@ class DomaintoolsReverseIP(Action):
                 "domaintools_action": "reverse_ip",
             }
 
-            print("Parsed arguments:", parsed_args)
             response = DomaintoolsrunAction(config, parsed_args)
 
-            # Parse the JSON string into a dict for Sekoia SDK validation
             if isinstance(response, str):
                 return json.loads(response)
             return response

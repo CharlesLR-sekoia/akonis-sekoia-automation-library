@@ -43,7 +43,43 @@
       },
       "results": {
         "type": "array",
-        "description": "Array of domain reputation results containing risk scores, threat components, proximity analysis, and security classifications"
+        "description": "Array of domain reputation results containing risk scores, threat components, proximity analysis, and security classifications",
+        "items": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The queried domain name"
+            },
+            "domain_risk": {
+              "type": "object",
+              "description": "Domain risk assessment with overall score and component breakdown",
+              "properties": {
+                "risk_score": {
+                  "type": "integer",
+                  "description": "Overall risk score for the domain (0-100, where higher values indicate greater risk)"
+                },
+                "components": {
+                  "type": "array",
+                  "description": "Risk score components breakdown by category (e.g., proximity, threat_profile)",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the risk component (e.g., 'proximity', 'threat_profile')"
+                      },
+                      "risk_score": {
+                        "type": "integer",
+                        "description": "Risk score for this specific component (0-100)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "missing_domains": {
         "type": "array",

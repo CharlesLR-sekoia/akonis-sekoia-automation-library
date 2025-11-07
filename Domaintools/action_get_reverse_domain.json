@@ -21,13 +21,56 @@
   "results": {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
-      "domain": {
+      "domain_name": {
         "type": "string",
         "description": "The domain name that was queried"
       },
       "ip_history": {
         "type": "array",
-        "description": "Chronological array of IP addresses where the domain has been hosted, showing infrastructure changes over time"
+        "description": "Chronological array of IP addresses where the domain has been hosted, showing infrastructure changes over time",
+        "items": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name in uppercase format"
+            },
+            "post_ip": {
+              "type": "string",
+              "description": "The IP address after the change (new IP address)"
+            },
+            "pre_ip": {
+              "type": ["string", "null"],
+              "description": "The IP address before the change (previous IP address, null for initial setup)"
+            },
+            "action": {
+              "type": "string",
+              "description": "Action code: 'N' for New, 'C' for Change, 'D' for Delete"
+            },
+            "actiondate": {
+              "type": "string",
+              "description": "Date when the IP address change occurred in YYYY-MM-DD format"
+            },
+            "action_in_words": {
+              "type": "string",
+              "description": "Human-readable description of the action (e.g., 'New', 'Change', 'Delete')"
+            }
+          }
+        }
+      },
+      "registrar_history": {
+        "type": "array",
+        "description": "Historical record of registrar changes for the domain",
+        "items": {
+          "type": "object"
+        }
+      },
+      "nameserver_history": {
+        "type": "array",
+        "description": "Historical record of nameserver changes for the domain",
+        "items": {
+          "type": "object"
+        }
       }
     },
     "title": "Response",
