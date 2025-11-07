@@ -8,13 +8,17 @@
     "properties": {
       "query_value": {
         "description": "The value to search for (e.g., domain name, IP address, email address, nameserver hostname)",
-        "default": "example.com",
         "type": "string"
       },
       "pivot_type": {
         "description": "The infrastructure indicator type to pivot on (e.g., 'domain', 'ip', 'email', 'nameserver_host')",
-        "default": "domain",
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "domain",
+          "ip",
+          "email",
+          "nameserver_host"
+        ]
       }
     },
     "required": [

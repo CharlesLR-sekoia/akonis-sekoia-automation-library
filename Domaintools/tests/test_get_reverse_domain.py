@@ -67,13 +67,6 @@ def test_get_reverse_domain_action_success():
         # Result is now a dict, no need to parse with json.loads()
         data = result
 
-        # Debug: print the actual structure
-        print("Result structure:", json.dumps(data, indent=2))
-
-        # Adjust assertion based on your actual return structure
-        # If your action wraps the response, you might need something like:
-        # assert data["Domain Reputation"]["results"][0]["domain"] == DOMAIN
-        # Or if it returns the raw API response:
         assert data["ip_history"] is not None
         assert mock_requests.call_count == 1
 
@@ -87,9 +80,6 @@ def test_get_reverse_domain_action_api_error():
             urllib.parse.urljoin(HOST, URI), status_code=500, json={"error": {"message": "Internal Server Error"}}
         )
         result = action.run({"domain": DOMAIN})
-
-        # Debug: print the actual result
-        print("Error result:", result)
 
         # Result is now a dict, no need to parse
         if result:

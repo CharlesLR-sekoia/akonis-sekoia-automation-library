@@ -51,3 +51,11 @@ addopts = '''
   --cov-fail-under=5
   --capture=sys
 '''
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+check_untyped_defs = true

@@ -14,9 +14,8 @@ class DomaintoolsPivotAction(Action):
             )
 
             parsed_args: dict[str, Any] = {
-                "domain": arguments.get("domain"),
-                "ip": arguments.get("ip"),
-                "email": arguments.get("email"),
+                "query_value": arguments.get("query_value"),
+                "pivot_type": arguments.get("pivot_type"),
                 "domaintools_action": "pivot_action",
             }
 

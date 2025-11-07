@@ -9,9 +9,10 @@ import urllib.parse
 import hmac
 import hashlib
 
-DOMAIN: str = "pivot-example1.com"
+QUERY_VALUE: str = "pivot-example1.com"
+PIVOT_TYPE: str = "domain"
 HOST = "https://api.domaintools.com/"
-URI = f"v1/iris-investigate/"  # Base URI without domain
+URI = f"v1/iris-investigate/"
 API_KEY = "LOREM"
 API_USERNAME = "IPSUM"
 TIMESTAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -90,25 +91,17 @@ def test_get_pivot_action_action_success():
     action.module.configuration = {"api_key": API_KEY, "api_username": API_USERNAME, "host": HOST}
 
     with requests_mock.Mocker() as mock_requests:
-        # Mock the actual URL that will be called (including domain parameter)
         mock_requests.get(
-            urllib.parse.urljoin(HOST, URI), json=DT_OUTPUT, additional_matcher=_qs_matcher({"domain": DOMAIN})
+            urllib.parse.urljoin(HOST, URI), json=DT_OUTPUT, additional_matcher=_qs_matcher({PIVOT_TYPE: QUERY_VALUE})
         )
-        result = action.run({"domain": DOMAIN})
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         assert result is not None
 
         # Result is now a dict, no need to parse with json.loads()
         data = result
 
-        # Debug: print the actual structure
-        print("Result structure:", json.dumps(data, indent=2))
-
-        # Adjust assertion based on your actual return structure
-        # If your action wraps the response, you might need something like:
-        # assert data["Domain Reputation"]["results"][0]["domain"] == DOMAIN
-        # Or if it returns the raw API response:
-        assert data["results"][0]["domain"] == DOMAIN
+        assert data["results"][0]["domain"] == QUERY_VALUE
         assert mock_requests.call_count == 1
 
 
@@ -121,12 +114,9 @@ def test_get_pivot_action_action_api_error():
             urllib.parse.urljoin(HOST, URI),
             status_code=500,
             json={"error": {"message": "Internal Server Error"}},
-            additional_matcher=_qs_matcher({"domain": DOMAIN}),
+            additional_matcher=_qs_matcher({PIVOT_TYPE: QUERY_VALUE}),
         )
-        result = action.run({"domain": DOMAIN})
-
-        # Debug: print the actual result
-        print("Error result:", result)
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         # Result is now a dict, no need to parse
         if result:
@@ -151,11 +141,11 @@ def test_get_pivot_action_string_response():
     json_string_response = json.dumps(DT_OUTPUT)
 
     with patch("domaintools.get_pivot_action.DomaintoolsrunAction", return_value=json_string_response):
-        result = action.run({"domain": DOMAIN})
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         # Should be parsed back to dict
         assert isinstance(result, dict)
-        assert result["response"]["results"][0]["domain"] == DOMAIN
+        assert result["response"]["results"][0]["domain"] == QUERY_VALUE
 
 
 def test_get_pivot_action_dict_response():
@@ -167,7 +157,7 @@ def test_get_pivot_action_dict_response():
 
     # Mock DomaintoolsrunAction to return a dict directly
     with patch("domaintools.get_pivot_action.DomaintoolsrunAction", return_value=DT_OUTPUT):
-        result = action.run({"domain": DOMAIN})
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         # Should return dict as-is
         assert isinstance(result, dict)
@@ -184,7 +174,7 @@ def test_get_pivot_action_domaintools_error():
 
     # Mock DomaintoolsrunAction to raise DomainToolsError
     with patch("domaintools.get_pivot_action.DomaintoolsrunAction", side_effect=DomainToolsError("Invalid API key")):
-        result = action.run({"domain": DOMAIN})
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         # Should return error dict
         assert isinstance(result, dict)
@@ -201,9 +191,71 @@ def test_get_pivot_action_unexpected_exception():
 
     # Mock DomaintoolsrunAction to raise a generic Exception
     with patch("domaintools.get_pivot_action.DomaintoolsrunAction", side_effect=ValueError("Unexpected error")):
-        result = action.run({"domain": DOMAIN})
+        result = action.run({"query_value": QUERY_VALUE, "pivot_type": PIVOT_TYPE})
 
         # Should return error dict
         assert isinstance(result, dict)
         assert "error" in result
         assert "Unexpected initialization error" in result["error"]
+
+
+def test_get_pivot_action_with_ip():
+    """Test pivot action with pivot_type='ip'"""
+    action = DomaintoolsPivotAction()
+    action.module.configuration = {"api_key": API_KEY, "api_username": API_USERNAME, "host": HOST}
+
+    ip_value = "107.154.76.60"
+    pivot_type = "ip"
+
+    with requests_mock.Mocker() as mock_requests:
+        mock_requests.get(
+            urllib.parse.urljoin(HOST, URI), json=DT_OUTPUT, additional_matcher=_qs_matcher({pivot_type: ip_value})
+        )
+        result = action.run({"query_value": ip_value, "pivot_type": pivot_type})
+
+        assert result is not None
+        assert isinstance(result, dict)
+        assert "results" in result
+        assert mock_requests.call_count == 1
+
+
+def test_get_pivot_action_with_email():
+    """Test pivot action with pivot_type='email'"""
+    action = DomaintoolsPivotAction()
+    action.module.configuration = {"api_key": API_KEY, "api_username": API_USERNAME, "host": HOST}
+
+    email_value = "admin@example.com"
+    pivot_type = "email"
+
+    with requests_mock.Mocker() as mock_requests:
+        mock_requests.get(
+            urllib.parse.urljoin(HOST, URI), json=DT_OUTPUT, additional_matcher=_qs_matcher({pivot_type: email_value})
+        )
+        result = action.run({"query_value": email_value, "pivot_type": pivot_type})
+
+        assert result is not None
+        assert isinstance(result, dict)
+        assert "results" in result
+        assert mock_requests.call_count == 1
+
+
+def test_get_pivot_action_with_nameserver_host():
+    """Test pivot action with pivot_type='nameserver_host'"""
+    action = DomaintoolsPivotAction()
+    action.module.configuration = {"api_key": API_KEY, "api_username": API_USERNAME, "host": HOST}
+
+    nameserver_value = "ns1.example.com"
+    pivot_type = "nameserver_host"
+
+    with requests_mock.Mocker() as mock_requests:
+        mock_requests.get(
+            urllib.parse.urljoin(HOST, URI),
+            json=DT_OUTPUT,
+            additional_matcher=_qs_matcher({pivot_type: nameserver_value}),
+        )
+        result = action.run({"query_value": nameserver_value, "pivot_type": pivot_type})
+
+        assert result is not None
+        assert isinstance(result, dict)
+        assert "results" in result
+        assert mock_requests.call_count == 1

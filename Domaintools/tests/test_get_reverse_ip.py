@@ -126,9 +126,6 @@ def test_get_reverse_ip_action_success():
         # Result is now a dict, no need to parse with json.loads()
         data = result
 
-        # Debug: print the actual structure
-        print("Result structure:", json.dumps(data, indent=2))
-
         # assert data["ip_addresses"] is not None
         assert mock_requests.call_count == 1
 
@@ -143,9 +140,6 @@ def test_get_reverse_ip_action_api_error():
         )
         # result = action.run({"domain": DOMAIN})
         result = action.run({"ip": IP})
-
-        # Debug: print the actual result
-        print("Error result:", result)
 
         # Result is now a dict, no need to parse
         if result:

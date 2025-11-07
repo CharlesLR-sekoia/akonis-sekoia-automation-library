@@ -384,6 +384,8 @@ def DomaintoolsrunAction(config: DomainToolsConfig, arguments: dict[str, Any]) -
         arg_domain = arguments.get("domain")
         arg_ip = arguments.get("ip")
         arg_email = arguments.get("email")
+        arg_query_value = arguments.get("query_value")
+        arg_pivot_type = arguments.get("pivot_type")
 
         # Name of the client method to call, see below
         arg_action = arguments.get("domaintools_action")
@@ -392,7 +394,12 @@ def DomaintoolsrunAction(config: DomainToolsConfig, arguments: dict[str, Any]) -
 
         dispatch = {
             "domain_reputation": ("domain_reputation", lambda: [arg_domain], {}, "Domain Reputation"),
-            "pivot_action": ("pivot_action", lambda: [arg_domain, "domain"], {"limit": 100}, "Pivot Action"),
+            "pivot_action": (
+                "pivot_action",
+                lambda: [arg_query_value, arg_pivot_type],
+                {"limit": 100},
+                "Pivot Action",
+            ),
             "reverse_domain": ("reverse_domain", lambda: [arg_domain], {}, "Reverse Domain"),
             "reverse_ip": ("reverse_ip", lambda: [arg_ip], {}, "Reverse IP"),
             "reverse_email": ("reverse_email", lambda: [arg_email], {"limit": 100}, "Reverse Email"),

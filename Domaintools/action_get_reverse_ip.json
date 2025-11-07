@@ -8,7 +8,6 @@
     "properties": {
       "ip": {
         "description": "The IP address to search for hosted domains (e.g., 8.8.8.8)",
-        "default": "8.8.8.8",
         "type": "string"
       }
     },

@@ -8,7 +8,6 @@
     "properties": {
       "domain": {
         "description": "The domain name to retrieve hosting history for (e.g., example.com)",
-        "default": "example.com",
         "type": "string"
       }
     },

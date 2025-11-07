@@ -8,7 +8,6 @@
     "properties": {
       "email": {
         "description": "The email address to search for in WHOIS records (e.g., admin@example.com)",
-        "default": "admin@example.com",
         "type": "string"
       }
     },
